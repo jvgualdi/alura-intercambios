@@ -1,5 +1,17 @@
 <?php
 
+function alura_intercambios_taxonomy_registration(){
+    register_taxonomy(
+        'paises',
+        'destinos',
+        array(
+            'labels' => array('name' => 'Países'),
+            'hierarchical' => true
+        )
+    );
+}
+add_action('init', 'alura_intercambios_taxonomy_registration');
+
 function alura_intercambios_customized_post_registration(){
     register_post_type('destinos',
         array(
