@@ -3,8 +3,36 @@
 $estiloPagina = 'destinos.css';
 
 require_once 'header.php';
+?>
+    <form action="#" class="container-alura formulario-pesquisa-paises">
+        <h2>Conheça nossos destinos</h2>
+        <select name="paises" id="paises">
+            <option value="">--Selecione--</option>
+            <?php
+                $paises = get_terms(array('taxonomy'=>'paises'));
+                foreach($paises as $pais){?>
+                    <option value="<?= $pais->name ?>"
+                    <?= !empty($_GET['paises']) && $_GET['paises'] === $pais->name ? 'selected' : ''?>> <?= $pais->name ?> </option>
+                    <?php
+                }
+            ?>
+        </select>
+        <input type="submit" value="Pesquisar">
+    </form>
 
-$args = array('post_type' => 'destinos');
+<?php
+
+if(!empty($_GET['paises'])){
+    $paisSelecionado = array(
+        array(
+            'taxonomy' => 'paises',
+            'field' => 'name',
+            'terms' => $_GET['paises']
+        )
+    );
+}
+
+$args = array('post_type' => 'destinos', 'tax_query' => !empty($_GET['paises']) ? $paisSelecionado : '');
 $query = new WP_Query($args);
 
 if($query->have_posts()){
