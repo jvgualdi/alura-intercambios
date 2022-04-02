@@ -86,3 +86,11 @@ function alura_intercambios_saving_metabox_data($post_id){
     }
 }
 add_action('save_post','alura_intercambios_saving_metabox_data');
+
+function alura_intercambios_adding_scripts(){
+    if(is_front_page()){
+        wp_enqueue_script('typed-js', get_template_directory_uri() . '/js/typed.min.js', array(), false, true);
+        wp_enqueue_script('banner-text-js', get_template_directory_uri() . '/js/bannet-text.js', array('typed-js'), false, true);
+    }
+}
+add_action('wp_enqueue_scripts', 'alura_intercambios_adding_scripts');
