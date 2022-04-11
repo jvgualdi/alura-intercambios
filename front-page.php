@@ -7,7 +7,7 @@ $args = array('post_type' => 'banners', 'post_status' => 'publish', 'posts_per_p
 $query = new WP_Query($args);
 if($query->have_posts()){
     while($query->have_posts()){
-        $querty->the_post();
+        $query->the_post();
         ?>
         <main>
             <div class="imagem-banner">

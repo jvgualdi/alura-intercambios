@@ -79,7 +79,7 @@ function alura_intercambios_saving_metabox_data($post_id){
         }
 
         update_post_meta(
-              $post_id,
+            $post_id,
             '_'. $key,
             $_POST[$key]
         );
@@ -87,10 +87,38 @@ function alura_intercambios_saving_metabox_data($post_id){
 }
 add_action('save_post','alura_intercambios_saving_metabox_data');
 
+function alura_intercambios_banner_text()
+{
+
+    $args = array(
+        'post_type' => 'banners',
+        'post_status' => 'publish',
+        'posts_per_page' => 1
+    );
+
+    $query = new WP_Query($args);
+    if ($query->have_posts()){
+        while ($query->have_posts()){
+            $query->the_post();
+            $texto1 = get_post_meta(get_the_ID(), '_texto_home_1', true);
+            $texto2 = get_post_meta(get_the_ID(), '_texto_home_2', true);
+            return array(
+                'texto_1' => $texto1,
+                'texto_2' => $texto2
+            );
+        }
+    }
+}
+
 function alura_intercambios_adding_scripts(){
+
+    $textosBanner = alura_intercambios_banner_text();
+
     if(is_front_page()){
         wp_enqueue_script('typed-js', get_template_directory_uri() . '/js/typed.min.js', array(), false, true);
-        wp_enqueue_script('banner-text-js', get_template_directory_uri() . '/js/bannet-text.js', array('typed-js'), false, true);
+        wp_enqueue_script('banner-text-js', get_template_directory_uri() . '/js/banner-text.js', array('typed-js'), false, true);
+        wp_localize_script('banner-text-js', 'data', $textosBanner);
     }
+
 }
 add_action('wp_enqueue_scripts', 'alura_intercambios_adding_scripts');
